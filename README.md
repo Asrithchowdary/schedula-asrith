@@ -21,55 +21,6 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-
-##ER Diagram
-erDiagram
-    USER {
-        int id PK
-        string email
-        string password
-        string role "Doctor or Patient"
-    }
-    PATIENT {
-        int id PK
-        int user_id FK
-        string full_name
-        string phone
-    }
-    DOCTOR {
-        int id PK
-        int user_id FK
-        string specialization
-        string experience
-    }
-    SLOT {
-        int id PK
-        int doctor_id FK
-        datetime start_time
-        datetime end_time
-        boolean is_booked
-    }
-    APPOINTMENT {
-        int id PK
-        int patient_id FK
-        int slot_id FK
-        string status "Booked, Cancelled, Rescheduled"
-    }
-    NOTIFICATION {
-        int id PK
-        int user_id FK
-        string message
-        datetime sent_at
-    }
-
-    USER ||--o| PATIENT : "is a"
-    USER ||--o| DOCTOR : "is a"
-    DOCTOR ||--o{ SLOT : "manages availability"
-    PATIENT ||--o{ APPOINTMENT : "books"
-    SLOT ||--o| APPOINTMENT : "converted to"
-    USER ||--o{ NOTIFICATION : "receives"
-
-
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
