@@ -7,6 +7,9 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { DoctorModule } from './doctor/doctor.module';
 import { PatientModule } from './patient/patient.module';
+import { DoctorProfile } from './doctor/doctor-profile.entity';
+import { PatientProfile } from './patient/patient-profile.entity';
+
 
 @Module({
   imports: [
@@ -17,7 +20,7 @@ import { PatientModule } from './patient/patient.module';
       username: 'postgres',
       password: 'postgres123',
       database: 'schedula_db',
-      entities: [User],
+      entities: [User,DoctorProfile,PatientProfile,],
       synchronize: true,
     }),
     AuthModule,
