@@ -1,4 +1,4 @@
-import {Controller,Post,Get,Patch,Body,Request,UseGuards,} from '@nestjs/common';
+import {Controller,Post,Get,Patch,Body,Request,UseGuards,Query,Param,ParseIntPipe,} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { DoctorService } from './doctor.service';
 import { RolesGuard } from '../auth/roles.guard';
@@ -6,18 +6,25 @@ import { Roles } from '../auth/roles.decorator';
 
 @Controller('doctor')
 export class DoctorController {
-  constructor(private doctorService: DoctorService) {}
+  constructor(
+    private readonly doctorService: DoctorService,
+  ) {}
 
+  // Create Doctor Profile
   @Post('profile')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('DOCTOR')
-  createProfile(@Body() body: any, @Request() req) {
+  createProfile(
+    @Body() body: any,
+    @Request() req,
+  ) {
     return this.doctorService.createProfile(
       body,
       req.user,
     );
   }
 
+  // Get Logged In Doctor Profile
   @Get('profile')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('DOCTOR')
@@ -27,6 +34,7 @@ export class DoctorController {
     );
   }
 
+  // Update Logged In Doctor Profile
   @Patch('profile')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('DOCTOR')
@@ -38,5 +46,41 @@ export class DoctorController {
       body,
       req.user,
     );
+  }
+
+  // Doctor Discovery API
+  @Get()
+  getDoctors(
+    @Query('specialization')
+    specialization?: string,
+
+    @Query('search')
+    search?: string,
+
+    @Query('availabbility')
+    availability?:string,
+
+    @Query('page')
+    page = 1,
+
+    @Query('limit')
+    limit = 10,
+  ) {
+    return this.doctorService.getDoctors(
+      specialization,
+      search,
+      availability,
+      Number(page),
+      Number(limit),
+    );
+  }
+
+  // Get Doctor Details By ID
+  @Get(':id')
+  getDoctorById(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
+    return this.doctorService.getDoctorById(id);
   }
 }
