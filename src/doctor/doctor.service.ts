@@ -1,6 +1,16 @@
-import {Injectable,BadRequestException,NotFoundException,} from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike,} from 'typeorm';
+
+import {
+  Repository,
+  ILike,
+} from 'typeorm';
+
 import { DoctorProfile } from './doctor-profile.entity';
 
 @Injectable()
@@ -10,7 +20,6 @@ export class DoctorService {
     private doctorRepo: Repository<DoctorProfile>,
   ) {}
 
-  // Create Doctor Profile
   async createProfile(
     data: any,
     user: any,
@@ -44,7 +53,6 @@ export class DoctorService {
     return this.doctorRepo.save(profile);
   }
 
-  // Get Logged In Doctor Profile
   async getProfile(user: any) {
     const profile =
       await this.doctorRepo.findOne({
@@ -67,7 +75,6 @@ export class DoctorService {
     return profile;
   }
 
-  // Update Doctor Profile
   async updateProfile(
     data: any,
     user: any,
@@ -75,28 +82,19 @@ export class DoctorService {
     const profile =
       await this.getProfile(user);
 
-    Object.assign(
-      profile,
-      data,
-    );
+    Object.assign(profile, data);
 
-    return this.doctorRepo.save(
-      profile,
-    );
+    return this.doctorRepo.save(profile);
   }
 
-  // Doctor Discovery API
   async getDoctors(
     specialization?: string,
     search?: string,
-    availability?:string,
+    availability?: string,
     page = 1,
     limit = 10,
   ) {
-    if (
-      page <= 0 ||
-      limit <= 0
-    ) {
+    if (page <= 0 || limit <= 0) {
       throw new BadRequestException(
         'Page and limit must be positive numbers',
       );
@@ -114,10 +112,12 @@ export class DoctorService {
         ILike(`%${search}%`);
     }
 
-    const [
-      doctors,
-      total,
-    ] =
+    if (availability !== undefined) {
+      where.isAvailable =
+        availability === 'true';
+    }
+
+    const [doctors, total] =
       await this.doctorRepo.findAndCount({
         where,
         select: {
@@ -126,16 +126,14 @@ export class DoctorService {
           specialization: true,
           experience: true,
           consultationFee: true,
+          isAvailable: true,
           availabilityHours: true,
         },
-        skip:
-          (page - 1) * limit,
+        skip: (page - 1) * limit,
         take: limit,
       });
 
-    if (
-      doctors.length === 0
-    ) {
+    if (doctors.length === 0) {
       throw new NotFoundException(
         'No doctors found',
       );
@@ -149,7 +147,6 @@ export class DoctorService {
     };
   }
 
-  // Get Doctor By ID
   async getDoctorById(
     id: number,
   ) {

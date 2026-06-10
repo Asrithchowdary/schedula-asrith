@@ -57,7 +57,7 @@ export class DoctorController {
     @Query('search')
     search?: string,
 
-    @Query('availabbility')
+    @Query('availability')
     availability?:string,
 
     @Query('page')

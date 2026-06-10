@@ -32,6 +32,9 @@ export class DoctorProfile {
   @Column('decimal')
   consultationFee!: number;
 
+  @Column({ default: true })
+  isAvailable!: boolean;
+
   @Column({ nullable: true })
   availabilityHours!: string;
 
