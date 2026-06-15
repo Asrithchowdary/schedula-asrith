@@ -15,7 +15,8 @@ import { CustomAvailability } from './availability/custom-availability.entity';
 import { AvailabilityModule } from './availability/availability.module';
 import { SlotModule } from './slot/slot.module';
 import { Slot } from './slot/slot.entity';
-
+import { AppointmentModule } from './appointment/appointment.module';
+import { Appointment } from './appointment/appointment.entity';
 
 console.log(
   'DATABASE_URL = ',
@@ -49,7 +50,7 @@ console.log(
         Slot,
       ],
 
-      synchronize: false,
+      synchronize: true,
     }),
 
     AuthModule,
@@ -58,6 +59,7 @@ console.log(
     PatientModule,
     AvailabilityModule,
     SlotModule,
+    AppointmentModule,
   ],
 
   controllers: [AppController],
