@@ -5,11 +5,13 @@ import {
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
 
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
 import { CustomAvailability } from '../availability/custom-availability.entity';
+import { Appointment } from '../appointment/appointment.entity';
 
 @Injectable()
 export class SlotService {
@@ -22,12 +24,15 @@ export class SlotService {
 
     @InjectRepository(CustomAvailability)
     private customRepo: Repository<CustomAvailability>,
+
+    @InjectRepository(Appointment)
+    private appointmentRepo: Repository<Appointment>,
   ) {}
 
   async getSlots(
     doctorId: number,
     date: string,
-    duration: number,
+    duration?: number,
   ) {
     if (!date) {
       throw new BadRequestException(
@@ -35,19 +40,11 @@ export class SlotService {
       );
     }
 
-    if (
-      duration !== 10 &&
-      duration !== 15 &&
-      duration !== 30
-    ) {
-      throw new BadRequestException(
-        'Duration must be 10, 15 or 30 minutes',
-      );
-    }
-
     const doctor =
       await this.doctorRepo.findOne({
-        where: { id: doctorId },
+        where: {
+          id: doctorId,
+        },
       });
 
     if (!doctor) {
@@ -64,21 +61,6 @@ export class SlotService {
     ) {
       throw new BadRequestException(
         'Invalid date',
-      );
-    }
-
-    const today = new Date();
-
-    today.setHours(
-      0,
-      0,
-      0,
-      0,
-    );
-
-    if (selectedDate < today) {
-      throw new BadRequestException(
-        'Past date not allowed',
       );
     }
 
@@ -126,7 +108,33 @@ export class SlotService {
       );
     }
 
+    const appointments =
+      await this.appointmentRepo.find({
+        where: {
+          doctor: {
+            id: doctorId,
+          },
+          appointmentDate:
+            date,
+        },
+      });
+
     const slots = [];
+
+    const schedulingType =
+      doctor.schedulingType ||
+      'STREAM';
+
+    const slotDuration =
+      doctor.slotDuration ||
+      duration ||
+      15;
+
+    const bufferTime =
+      doctor.bufferTime || 0;
+
+    const waveCapacity =
+      doctor.waveCapacity || 1;
 
     const now = new Date();
 
@@ -144,7 +152,8 @@ export class SlotService {
       let current = start;
 
       while (
-        current + duration <= end
+        current + slotDuration <=
+        end
       ) {
         const slotStart =
           this.minutesToTime(
@@ -154,7 +163,7 @@ export class SlotService {
         const slotEnd =
           this.minutesToTime(
             current +
-              duration,
+              slotDuration,
           );
 
         const slotDateTime =
@@ -165,24 +174,62 @@ export class SlotService {
         if (
           slotDateTime > now
         ) {
+          let booked = 0;
+
+          if (
+            schedulingType ===
+            'STREAM'
+          ) {
+            booked =
+              appointments.filter(
+                (a) =>
+                  a.startTime ===
+                  slotStart,
+              ).length;
+          } else {
+            booked =
+              appointments.filter(
+                (a) =>
+                  a.startTime >=
+                    slotStart &&
+                  a.endTime <=
+                    slotEnd,
+              ).length;
+          }
+
+          const capacity =
+            schedulingType ===
+            'STREAM'
+              ? 1
+              : waveCapacity;
+
+          const available =
+            capacity - booked;
+
           slots.push({
             startTime:
               slotStart,
-            endTime:
-              slotEnd,
+
+            endTime: slotEnd,
+
+            schedulingType,
+
+            slotDuration,
+
+            bufferTime,
+
+            capacity,
+
+            booked,
+
+            available,
           });
         }
 
-        current += duration;
+        current +=
+          slotDuration +
+          bufferTime;
       }
-    }
-
-    if (
-      slots.length === 0
-    ) {
-      throw new NotFoundException(
-        'No future slots available',
-      );
     }
 
     return slots;

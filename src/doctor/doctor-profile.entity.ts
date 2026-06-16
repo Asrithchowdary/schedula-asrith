@@ -5,7 +5,6 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-
 import { User } from '../users/entities/user.entity';
 
 @Entity('doctor_profiles')
@@ -40,4 +39,26 @@ export class DoctorProfile {
 
   @Column({ nullable: true })
   profileDetails!: string;
+
+  @Column({
+  default: 'STREAM',
+})
+schedulingType: string;
+
+
+@Column({
+  nullable: true,
+})
+slotDuration: number;
+
+@Column({
+  nullable: true,
+})
+bufferTime: number;
+
+@Column({
+  nullable: true,
+})
+waveCapacity: number;
+
 }
