@@ -1,0 +1,1554 @@
+{
+  "info": {
+    "_postman_id": "773ae28b-b63c-42e6-aa2d-404f565e2f45",
+    "name": "Batch63",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52440845",
+    "_collection_link": "https://go.postman.co/collection/52440845-773ae28b-b63c-42e6-aa2d-404f565e2f45?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "getRequest",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:1104/getbike",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "getbike"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "bikelist",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:1104/bikelist",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "bikelist"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "insert",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"simbu@1\",\r\n    \"fname\": \"sivaji\",\r\n    \"lname\": \"akani\",\r\n    \"password\" : \"simbu@123\",\r\n    \"email\" : \"simbu@gmail.com\",\r\n    \"phone\" : 9922992112\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1104/api/v1/insert",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "insert"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getStudentlist",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"simbu@1\",\r\n    \"fname\": \"sivaji\",\r\n    \"lname\": \"akani\",\r\n    \"password\" : \"simbu@123\",\r\n    \"email\" : \"simbu@gmail.com\",\r\n    \"phone\" : 9922992112\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:1104/api/v1/getstudentList",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "getstudentList"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get Student id",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"simbu@1\",\r\n    \"fname\": \"sivaji\",\r\n    \"lname\": \"akani\",\r\n    \"password\" : \"simbu@123\",\r\n    \"email\" : \"simbu@gmail.com\",\r\n    \"phone\" : 9922992112\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:1104/api/v1/getStudent/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "getStudent",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get Student phone",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:1104/api/v1/getStudent/phone/9922992112",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "getStudent",
+            "phone",
+            "9922992112"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Doctors",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"name\": \"Dr. srini\",\r\n   \"specialization\": \"Cardiology\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1104/doctors",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "doctors"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Patients",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"name\": \"Chenna\",\r\n   \"age\" : 22,\r\n   \"gender\" : \"male\",\r\n   \"phone\": \"8845671511\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1104/patients",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "patients"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Appointments",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1104/appointments/book?doctorId=3&patientId=1&date=2026-03-20",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "appointments",
+            "book"
+          ],
+          "query": [
+            {
+              "key": "doctorId",
+              "value": "3"
+            },
+            {
+              "key": "patientId",
+              "value": "1"
+            },
+            {
+              "key": "date",
+              "value": "2026-03-20"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Student",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n    \"phone\": 9218566969\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1104/api/v1/updateStudentPhone/id/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "updateStudentPhone",
+            "id",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Patch",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\r\n\"phone\": 9218566969\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1104/api/v1/students/3/phone",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "students",
+            "3",
+            "phone"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Student",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\r\n\"phone\": 9218566969\r\n\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:1104/api/v1/delete/9218566969",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "1104",
+          "path": [
+            "api",
+            "v1",
+            "delete",
+            "9218566969"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post task",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin123\",\r\n    \"email\": \"admin@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get tasks",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"Learn Spring Boot\",\r\n    \"description\": \"Practice CRUD operations\",\r\n    \"status\": \"Pending\",\r\n    \"dueDate\": \"2026-03-05\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get tasks by id",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"Learn Spring Boot\",\r\n    \"description\": \"Practice CRUD operations\",\r\n    \"status\": \"Pending\",\r\n    \"dueDate\": \"2026-03-05\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Updated Title\",\r\n  \"description\": \"Updated Description\",\r\n  \"status\": \"Completed\",\r\n  \"dueDate\": \"2026-03-10\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete task",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Updated Title\",\r\n  \"description\": \"Updated Description\",\r\n  \"status\": \"Completed\",\r\n  \"dueDate\": \"2026-03-10\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin123\",\r\n    \"email\": \"admin@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retiterval",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "SBR",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Asrith\",\r\n    \"email\": \"asrith@gmail.com\",\r\n    \"password\": \"1243\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:9191/api/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9191",
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SBR",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Asrith\",\r\n    \"email\": \"asrith@gmail.com\",\r\n    \"password\": \"1243\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9191/api/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9191",
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SBR-P",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"TV\",\r\n    \"description\": \"LG QLED TV 4K resolution\",\r\n    \"price\": 55000.0,\r\n    \"stock\": 9\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:9191/api/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9191",
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SBR-p",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"TV\",\r\n    \"description\": \"LG QLED TV 4K resolution\",\r\n    \"price\": 55000.0,\r\n    \"stock\": 9\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9191/api/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9191",
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SBR-C",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 1,\r\n    \"productId\": 2,\r\n    \"quantity\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:9191/api/cart",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9191",
+          "path": [
+            "api",
+            "cart"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SBR-C",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 1,\r\n    \"productId\": 2,\r\n    \"quantity\": 1\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9191/api/cart/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9191",
+          "path": [
+            "api",
+            "cart",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "sch",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"balu@test.com\",\r\n    \"password\": \"pass220\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "sch -p",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Sharma\",\r\n  \"email\": \"sharma@test.com\",\r\n  \"password\": \"pass100\",\r\n  \"role\": \"PATIENT\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/signup",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "sch-lp",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"sharma@test.com\",\r\n    \"password\": \"pass100\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/signup",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "sch-d",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjgsImVtYWlsIjoiZG9jdG9yQHRlc3QuY29tIiwicm9sZSI6IkRPQ1RPUiIsImlhdCI6MTc4MDkyMTkxNiwiZXhwIjoxNzgxMDA4MzE2fQ.ByHamAQKWR963VnZMH-_5XjLSVF4BZNS7o2Mw2527L8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/doctor/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update-doc",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE4LCJlbWFpbCI6Imtvd3NoaWtAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgwOTI3OTM5LCJleHAiOjE3ODEwMTQzMzl9.SgyFXBm60pqv5_cdEPac1J1BveB2xf39YcQT22TX9Dk",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"consultationFee\": 600,\r\n    \"experience\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/doctor/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Doctor Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoia2lzaG9yZUB0ZXN0LmNvbSIsInJvbGUiOiJET0NUT1IiLCJpYXQiOjE3ODExNjM5NzMsImV4cCI6MTc4MTI1MDM3M30.uEuj2LPGCyJMcGXFnG6Gq-T8La4j-TPDJyvVUHaDlBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"fullName\": \"Dr.Kishore\",\r\n    \"specialization\": \"Dermatologist\",\r\n    \"experience\": 5,\r\n    \"qualification\": \"MBBS\",\r\n    \"consultationFee\": 1500,\r\n    \"availabilityHours\": \"Available\",\r\n    \"profileDetails\": \"Skin\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://schedula-asrith.onrender.com/doctor/profile",
+          "protocol": "https",
+          "host": [
+            "schedula-asrith",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "doctor",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get pateint",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoiYXNob2tAdGVzdC5jb20iLCJyb2xlIjoiUEFUSUVOVCIsImlhdCI6MTc4MTA4NzMxNiwiZXhwIjoxNzgxMTczNzE2fQ.mLTy7Gx33mNfOCEF1Agp-sCZd2TJnyZLY73gu31itz0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"fullName\": \"Alex\",\r\n  \"age\": 25,\r\n  \"gender\": \"Male\",\r\n  \"contactDetails\": \"9876543210\",\r\n  \"healthInformation\": \"No allergies\"\r\n}"
+        },
+        "url": {
+          "raw": "https://schedula-asrith.onrender.com/patient/profile",
+          "protocol": "https",
+          "host": [
+            "schedula-asrith",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "patient",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update patient",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE5LCJlbWFpbCI6Im1hbGlrQHRlc3QuY29tIiwicm9sZSI6IlBBVElFTlQiLCJpYXQiOjE3ODA5MjgwNjMsImV4cCI6MTc4MTAxNDQ2M30.bFIKJkuzRNXGlXM6JPvZkTk72Ff0mFxJRkzvBFHRiYA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"age\": 23,\r\n    \"name\": \"Sai Malik\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/patient/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "patient",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create-patient",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE5LCJlbWFpbCI6Im1hbGlrQHRlc3QuY29tIiwicm9sZSI6IlBBVElFTlQiLCJpYXQiOjE3ODA5MjgwNjMsImV4cCI6MTc4MTAxNDQ2M30.bFIKJkuzRNXGlXM6JPvZkTk72Ff0mFxJRkzvBFHRiYA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"fullName\": \"Malik\",\r\n  \"age\": 21,\r\n  \"gender\": \"Male\",\r\n  \"contactDetails\": \"986734782321\",\r\n  \"healthInformation\": \"No allergies\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://schedula-asrith.onrender.com/patient/profile",
+          "protocol": "https",
+          "host": [
+            "schedula-asrith",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "patient",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create-patient-profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsImVtYWlsIjoiYm9iYnlAdGVzdC5jb20iLCJyb2xlIjoiUEFUSUVOVCIsImlhdCI6MTc4MTA4ODAyNywiZXhwIjoxNzgxMTc0NDI3fQ.7Jeqlmmm-2Eti1_qfKY32zbWLhWW0Txe0FTrl239v-I",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"fullName\": \"Bobby\",\r\n  \"age\": 24,\r\n  \"gender\": \"Male\",\r\n  \"contactDetails\": \"9632482169\",\r\n  \"healthInformation\": \"No allergies\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://schedula-asrith.onrender.com/patient/profile",
+          "protocol": "https",
+          "host": [
+            "schedula-asrith",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "patient",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get doctor",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxNjExMzMyLCJleHAiOjE3ODE2OTc3MzJ9.vSIgmAQ83029pPcC0A-eTSy5rDg9wQota7SXoin3Y84",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/doctor/profile",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get doctors",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"Sanjay@test.com\",\r\n    \"password\": \"pass600\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/doctor/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Recurring Availability",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxMTY5NTY5LCJleHAiOjE3ODEyNTU5Njl9.yAw58RdHvk7QzR5xd1mXa4tIMlFU3hadNgdII2l89_4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dayOfWeek\": \"MONDAY\",\r\n    \"startTime\": \"15:00\",\r\n    \"endTime\": \"11:00\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/doctor/availability",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "availability"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Availability",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxMTY2NTcxLCJleHAiOjE3ODEyNTI5NzF9.zduzRnYf7dueWWqiMvfKg0Bv4qtsIT2iRYi9Td5ag8E",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/doctor/availability/date?date=2026-06-15",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "availability",
+            "date"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-06-15"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DA",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxMTY2NTcxLCJleHAiOjE3ODEyNTI5NzF9.zduzRnYf7dueWWqiMvfKg0Bv4qtsIT2iRYi9Td5ag8E",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dayOfWeek\": \"TUESDAY\",\r\n    \"startTime\": \"14:00\",\r\n    \"endTime\": \"17:00\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/doctor/availability",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "availability"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Override",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxMjQzNDYxLCJleHAiOjE3ODEzMjk4NjF9.x5GDIkGOAssiX8ouwURs_G-s82wI56UM8vym8AQybgQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"date\": \"2026-06-15\",\r\n    \"startTime\": \"18:00\",\r\n    \"endTime\": \"20:00\",\r\n    \"isAvailable\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000 /doctor/availability/override",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000 ",
+          "path": [
+            "doctor",
+            "availability",
+            "override"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "OverrideA",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxMTY5NTY5LCJleHAiOjE3ODEyNTU5Njl9.yAw58RdHvk7QzR5xd1mXa4tIMlFU3hadNgdII2l89_4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"date\": \"2026-06-15\",\r\n    \"startTime\": \"15:00\",\r\n    \"endTime\": \"16:00\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000 /doctor/availability/date?date=2026-06-16",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000 ",
+          "path": [
+            "doctor",
+            "availability",
+            "date"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-06-16"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "uA",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxNjAyOTg5LCJleHAiOjE3ODE2ODkzODl9.OnjZPw2L3lzzeGnJf9RoNp31jRH3mjEZjZ7zThC7owQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"maxCapacity\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000 /doctor/availability/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000 ",
+          "path": [
+            "doctor",
+            "availability",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "slots",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJhbHVAdGVzdC5jb20iLCJyb2xlIjoiRE9DVE9SIiwiaWF0IjoxNzgxMjUzOTAzLCJleHAiOjE3ODEzNDAzMDN9.zJiaf5n9-rv0WJ-FOBKGKXOnXzLztNtTWw1DcgpV1gE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/doctor/6/slots?date=2026-06-16&duration=15",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "doctor",
+            "6",
+            "slots"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-06-16"
+            },
+            {
+              "key": "duration",
+              "value": "15"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "appointments",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"patientId\": 3,\r\n  \"doctorId\": 6,\r\n  \"date\": \"2026-06-20\",\r\n  \"startTime\": \"10:15\",\r\n  \"endTime\": \"10:30\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/appointment",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "appointment"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "My appointments",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/appointment/my/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "appointment",
+            "my",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Doctor Appointments",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/appointment/doctor/6",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "appointment",
+            "doctor",
+            "6"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel App",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/appointment/5/cancel",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "appointment",
+            "5",
+            "cancel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reschedule",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEzLCJlbWFpbCI6Imxva2lAZ21haWwuY29tIiwicm9sZSI6IlBBVElFTlQiLCJpYXQiOjE3ODE2NzgwMTQsImV4cCI6MTc4MTc2NDQxNH0.qMkcc_UcPjVmZ-1IM6Kz1pooRnom9GT-9I_NXFcfses",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"newDate\": \"2026-06-12\",\r\n  \"startTime\": \"10:20\",\r\n  \"endTime\": \"10:35\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/appointment/1/reschedule",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "appointment",
+            "1",
+            "reschedule"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
