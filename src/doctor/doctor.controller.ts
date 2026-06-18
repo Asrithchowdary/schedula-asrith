@@ -83,4 +83,14 @@ export class DoctorController {
   ) {
     return this.doctorService.getDoctorById(id);
   }
+  
+  @Get(':doctorId/availability')
+getDoctorAvailability(
+  @Param('doctorId', ParseIntPipe)
+  doctorId: number,
+) {
+  return this.doctorService.getDoctorAvailability(
+    doctorId,
+  );
+}
 }

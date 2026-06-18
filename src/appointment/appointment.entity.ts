@@ -5,7 +5,6 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
 import { AppointmentStatus } from './appointment-status.enum';
@@ -29,6 +28,16 @@ export class Appointment {
 
   @Column()
   endTime: string;
+
+  @Column({
+    nullable: true,
+  })
+  tokenNumber: number;
+
+  @Column({
+    nullable: true,
+  })
+  schedulingType: string;
 
   @Column({
     type: 'enum',

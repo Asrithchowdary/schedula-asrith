@@ -2,10 +2,10 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { Appointment } from './appointment.entity';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
@@ -67,6 +67,35 @@ export class AppointmentService {
       );
     }
 
+    let tokenNumber = null;
+
+    if (
+      doctor.schedulingType === 'WAVE'
+    ) {
+      const bookingCount =
+        await this.appointmentRepository.count({
+          where: {
+            doctor: {
+              id: doctor.id,
+            },
+            appointmentDate: body.date,
+            status:
+              AppointmentStatus.BOOKED,
+          },
+        });
+
+      if (
+        bookingCount >=
+        doctor.waveCapacity
+      ) {
+        throw new BadRequestException(
+          'Wave capacity reached',
+        );
+      }
+
+      tokenNumber = bookingCount + 1;
+    }
+
     const existingAppointment =
       await this.appointmentRepository.findOne({
         where: {
@@ -76,14 +105,16 @@ export class AppointmentService {
           appointmentDate: body.date,
           startTime: body.startTime,
           endTime: body.endTime,
-          status: AppointmentStatus.BOOKED,
-        },
-        relations: {
-          doctor: true,
+          status:
+            AppointmentStatus.BOOKED,
         },
       });
 
-    if (existingAppointment) {
+    if (
+      doctor.schedulingType ===
+        'STREAM' &&
+      existingAppointment
+    ) {
       throw new BadRequestException(
         'Slot already booked',
       );
@@ -96,7 +127,11 @@ export class AppointmentService {
         appointmentDate: body.date,
         startTime: body.startTime,
         endTime: body.endTime,
-        status: AppointmentStatus.BOOKED,
+        schedulingType:
+          doctor.schedulingType,
+        tokenNumber,
+        status:
+          AppointmentStatus.BOOKED,
       });
 
     await this.appointmentRepository.save(
@@ -104,9 +139,18 @@ export class AppointmentService {
     );
 
     return {
-      message:
-        'Appointment booked successfully',
-      appointment,
+      success: true,
+      appointmentId: appointment.id,
+      date:
+        appointment.appointmentDate,
+      startTime:
+        appointment.startTime,
+      endTime:
+        appointment.endTime,
+      schedulingType:
+        appointment.schedulingType,
+      tokenNumber:
+        appointment.tokenNumber,
     };
   }
 
@@ -146,36 +190,36 @@ export class AppointmentService {
     });
   }
 
-async cancelAppointment(
-  appointmentId: number,
-) {
-  const appointment =
-    await this.appointmentRepository.findOne({
-      where: {
-        id: appointmentId,
-      },
-    });
-
-  if (!appointment) {
-    throw new NotFoundException(
-      'Appointment not found',
-    );
-  }
-
-  if (
-    appointment.status ===
-    AppointmentStatus.CANCELLED
+  async cancelAppointment(
+    appointmentId: number,
   ) {
-    throw new BadRequestException(
-      'Appointment already cancelled',
+    const appointment =
+      await this.appointmentRepository.findOne({
+        where: {
+          id: appointmentId,
+        },
+      });
+
+    if (!appointment) {
+      throw new NotFoundException(
+        'Appointment not found',
+      );
+    }
+
+    if (
+      appointment.status ===
+      AppointmentStatus.CANCELLED
+    ) {
+      throw new BadRequestException(
+        'Appointment already cancelled',
+      );
+    }
+
+    appointment.status =
+      AppointmentStatus.CANCELLED;
+
+    return await this.appointmentRepository.save(
+      appointment,
     );
   }
-
-  appointment.status =
-    AppointmentStatus.CANCELLED;
-
-  return await this.appointmentRepository.save(
-    appointment,
-  );
-}
 }

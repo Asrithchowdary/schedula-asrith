@@ -3,22 +3,21 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
-import {
-  Repository,
-  ILike,
-} from 'typeorm';
-
+import { RecurringAvailability } from '../availability/recurring-availability.entity';
+import {Repository,ILike,} from 'typeorm';
 import { DoctorProfile } from './doctor-profile.entity';
+
 
 @Injectable()
 export class DoctorService {
   constructor(
-    @InjectRepository(DoctorProfile)
-    private doctorRepo: Repository<DoctorProfile>,
-  ) {}
+  @InjectRepository(DoctorProfile)
+  private doctorRepo: Repository<DoctorProfile>,
+
+  @InjectRepository(RecurringAvailability)
+  private recurringRepo: Repository<RecurringAvailability>,
+) {}
 
   async createProfile(
     data: any,
@@ -168,4 +167,31 @@ export class DoctorService {
 
     return doctor;
   }
+  async getDoctorAvailability(
+  doctorId: number,
+) {
+  const doctor =
+    await this.doctorRepo.findOne({
+      where: {
+        id: doctorId,
+      },
+    });
+
+  if (!doctor) {
+    throw new NotFoundException(
+      'Doctor not found',
+    );
+  }
+
+  const schedules =
+    await this.recurringRepo.find({
+      where: {
+        doctor: {
+          id: doctorId,
+        },
+      },
+    });
+
+  return schedules;
+}
 }

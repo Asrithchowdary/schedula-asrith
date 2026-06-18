@@ -8,6 +8,7 @@ import { SlotController } from './slot.controller';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
 import { CustomAvailability } from '../availability/custom-availability.entity';
+import { Appointment } from '../appointment/appointment.entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CustomAvailability } from '../availability/custom-availability.entity';
       DoctorProfile,
       RecurringAvailability,
       CustomAvailability,
+      Appointment,
     ]),
   ],
   controllers: [SlotController],
