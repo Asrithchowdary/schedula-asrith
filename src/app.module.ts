@@ -13,6 +13,9 @@ import { PatientProfile } from './patient/patient-profile.entity';
 import { RecurringAvailability } from './availability/recurring-availability.entity';
 import { CustomAvailability } from './availability/custom-availability.entity';
 import { AvailabilityModule } from './availability/availability.module';
+import { SlotModule } from './slot/slot.module';
+import { Slot } from './slot/slot.entity';
+
 
 console.log(
   'DATABASE_URL = ',
@@ -43,6 +46,7 @@ console.log(
         PatientProfile,
         RecurringAvailability,
         CustomAvailability,
+        Slot,
       ],
 
       synchronize: false,
@@ -53,6 +57,7 @@ console.log(
     DoctorModule,
     PatientModule,
     AvailabilityModule,
+    SlotModule,
   ],
 
   controllers: [AppController],
