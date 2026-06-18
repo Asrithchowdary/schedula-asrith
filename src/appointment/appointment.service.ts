@@ -222,4 +222,143 @@ export class AppointmentService {
       appointment,
     );
   }
+  async rescheduleAppointment(
+  appointmentId: number,
+  body: any,
+) {
+  const appointment =
+    await this.appointmentRepository.findOne({
+      where: {
+        id: appointmentId,
+      },
+      relations: {
+        doctor: true,
+        patient: true,
+      },
+    });
+
+  if (!appointment) {
+    throw new NotFoundException(
+      'Appointment not found',
+    );
+  }
+
+  if (
+    appointment.status ===
+    AppointmentStatus.CANCELLED
+  ) {
+    throw new BadRequestException(
+      'Cannot reschedule cancelled appointment',
+    );
+  }
+
+  const newDate =
+    new Date(body.newDate);
+
+  const today = new Date();
+
+  if (newDate < today) {
+    throw new BadRequestException(
+      'Cannot reschedule to past date',
+    );
+  }
+
+  if (
+    appointment.appointmentDate ===
+      body.newDate &&
+    appointment.startTime ===
+      body.startTime &&
+    appointment.endTime ===
+      body.endTime
+  ) {
+    throw new BadRequestException(
+      'Cannot reschedule to same slot'
+    );
+  }
+
+  const existing =
+    await this.appointmentRepository.findOne({
+      where: {
+        doctor: {
+          id: appointment.doctor.id,
+        },
+        appointmentDate:
+          body.newDate,
+        startTime:
+          body.startTime,
+        endTime:
+          body.endTime,
+        status:
+          AppointmentStatus.BOOKED,
+      },
+    });
+
+  if (
+    appointment.schedulingType ===
+      'STREAM' &&
+    existing
+  ) {
+    throw new BadRequestException(
+      'Requested slot unavailable'
+    );
+  }
+
+  if (
+    appointment.schedulingType ===
+    'WAVE'
+  ) {
+    const count =
+      await this.appointmentRepository.count({
+        where: {
+          doctor: {
+            id: appointment.doctor.id,
+          },
+          appointmentDate:
+            body.newDate,
+          status:
+            AppointmentStatus.BOOKED,
+        },
+      });
+
+    if (
+      count >=
+      appointment.doctor.waveCapacity
+    ) {
+      throw new BadRequestException(
+        'Wave capacity full'
+      );
+    }
+
+    appointment.tokenNumber =
+      count + 1;
+  }
+
+  appointment.appointmentDate =
+    body.newDate;
+
+  appointment.startTime =
+    body.startTime;
+
+  appointment.endTime =
+    body.endTime;
+
+  await this.appointmentRepository.save(
+    appointment,
+  );
+
+  return {
+    message:
+      'Appointment rescheduled successfully',
+    appointmentId:
+      appointment.id,
+    date:
+      appointment.appointmentDate,
+    startTime:
+      appointment.startTime,
+    endTime:
+      appointment.endTime,
+    tokenNumber:
+      appointment.tokenNumber,
+  };
+}
 }
