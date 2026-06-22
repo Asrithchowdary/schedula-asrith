@@ -6,13 +6,12 @@ import { DoctorService } from './doctor.service';
 
 import { DoctorProfile } from './doctor-profile.entity';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
-import { Appointment } from '../appointment/appointment.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       DoctorProfile,
       RecurringAvailability,
-      Appointment,
     ]),
   ],
   controllers: [DoctorController],
