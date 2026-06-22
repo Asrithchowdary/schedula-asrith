@@ -190,40 +190,22 @@ export class AppointmentService {
   }
 
   async getDoctorAppointments(
-  doctorId: number,
-  date?: string,
-) {
-  const whereCondition: any = {
-    doctor: {
-      id: doctorId,
-    },
-    status: AppointmentStatus.BOOKED,
-  };
-
-  if (date) {
-    whereCondition.appointmentDate = date;
-  }
-
-  const appointments =
-    await this.appointmentRepository.find({
-      where: whereCondition,
+    doctorId: number,
+  ) {
+    return this.appointmentRepository.find({
+      where: {
+        doctor: {
+          id: doctorId,
+        },
+      },
       relations: {
         patient: true,
-        doctor: true,
       },
       order: {
         appointmentDate: 'ASC',
       },
     });
-
-  if (!appointments.length) {
-    throw new NotFoundException(
-      'No appointments found',
-    );
   }
-
-  return appointments;
-}
   async cancelAppointment(
     appointmentId: number,
   ) {
@@ -256,153 +238,12 @@ export class AppointmentService {
       appointment,
     );
   }
-  async rescheduleAppointment(
-  appointmentId: number,
-  body: any,
-) {
-  const appointment =
-    await this.appointmentRepository.findOne({
-      where: {
-        id: appointmentId,
-      },
-      relations: {
-        doctor: true,
-        patient: true,
-      },
-    });
-
-  if (!appointment) {
-    throw new NotFoundException(
-      'Appointment not found',
-    );
-  }
-
-  if (
-    appointment.status ===
-    AppointmentStatus.CANCELLED
-  ) {
-    throw new BadRequestException(
-      'Cannot reschedule cancelled appointment',
-    );
-  }
-
-  const newDate =
-    new Date(body.newDate);
-
-  const today = new Date();
-
-  if (newDate < today) {
-    throw new BadRequestException(
-      'Cannot reschedule to past date',
-    );
-  }
-
-  if (
-    appointment.appointmentDate ===
-      body.newDate &&
-    appointment.startTime ===
-      body.startTime &&
-    appointment.endTime ===
-      body.endTime
-  ) {
-    throw new BadRequestException(
-      'Cannot reschedule to same slot'
-    );
-  }
-
-  const existing =
-    await this.appointmentRepository.findOne({
-      where: {
-        doctor: {
-          id: appointment.doctor.id,
-        },
-        appointmentDate:
-          body.newDate,
-        startTime:
-          body.startTime,
-        endTime:
-          body.endTime,
-        status:
-          AppointmentStatus.BOOKED,
-      },
-    });
-
-  if (
-    appointment.schedulingType ===
-      'STREAM' &&
-    existing
-  ) {
-    throw new BadRequestException(
-      'Requested slot unavailable'
-    );
-  }
-
-  if (
-    appointment.schedulingType ===
-    'WAVE'
-  ) {
-    const count =
-      await this.appointmentRepository.count({
-        where: {
-          doctor: {
-            id: appointment.doctor.id,
-          },
-          appointmentDate:
-            body.newDate,
-          status:
-            AppointmentStatus.BOOKED,
-        },
-      });
-
-    if (
-      count >=
-      appointment.doctor.waveCapacity
-    ) {
-      throw new BadRequestException(
-        'Wave capacity full'
-      );
-    }
-
-    appointment.tokenNumber =
-      count + 1;
-  }
-
-  appointment.appointmentDate =
-    body.newDate;
-
-  appointment.startTime =
-    body.startTime;
-
-  appointment.endTime =
-    body.endTime;
-
-  await this.appointmentRepository.save(
-    appointment,
-  );
-
-  return {
-    message:
-      'Appointment rescheduled successfully',
-    appointmentId:
-      appointment.id,
-    date:
-      appointment.appointmentDate,
-    startTime:
-      appointment.startTime,
-    endTime:
-      appointment.endTime,
-    tokenNumber:
-      appointment.tokenNumber,
-  };
-}
 async getNextAvailable(
   doctorId: number,
 ) {
   const doctor =
     await this.doctorRepository.findOne({
-      where: {
-        id: doctorId,
-      },
+      where: { id: doctorId },
     });
 
   if (!doctor) {
@@ -411,53 +252,35 @@ async getNextAvailable(
     );
   }
 
-  const schedules =
-    await this.recurringRepository.find({
-      where: {
-        doctor: {
-          id: doctorId,
-        },
-      },
-    });
+  const today = new Date();
 
-  if (schedules.length === 0) {
-    throw new BadRequestException(
-      'Doctor unavailable',
-    );
-  }
-
-  for (
-    let i = 0;
-    i < 30;
-    i++
-  ) {
-    const currentDate =
-      new Date();
-
-    currentDate.setDate(
-      currentDate.getDate() + i,
+  for (let i = 0; i < 30; i++) {
+    const checkDate = new Date();
+    checkDate.setDate(
+      today.getDate() + i,
     );
 
     const dayName =
-      this.getDayName(
-        currentDate,
+      checkDate.toLocaleDateString(
+        'en-US',
+        {
+          weekday: 'long',
+        },
       );
 
     const schedule =
-      schedules.find(
-        (s) =>
-          s.dayOfWeek.toLowerCase() ===
-          dayName.toLowerCase(),
-      );
+      await this.recurringRepository.findOne({
+        where: {
+          doctor: {
+            id: doctorId,
+          },
+          dayOfWeek: dayName,
+        },
+      });
 
     if (!schedule) {
       continue;
     }
-
-    const dateString =
-      currentDate
-        .toISOString()
-        .split('T')[0];
 
     const bookedCount =
       await this.appointmentRepository.count({
@@ -466,7 +289,9 @@ async getNextAvailable(
             id: doctorId,
           },
           appointmentDate:
-            dateString,
+            checkDate
+              .toISOString()
+              .split('T')[0],
           status:
             AppointmentStatus.BOOKED,
         },
@@ -483,10 +308,11 @@ async getNextAvailable(
         return {
           success: true,
           availableDate:
-            dateString,
-          schedulingType:
-            'WAVE',
-          availableTokens:
+            checkDate
+              .toISOString()
+              .split('T')[0],
+          schedulingType: 'WAVE',
+          availableSlots:
             schedule.maxCapacity -
             bookedCount,
           startTime:
@@ -507,28 +333,25 @@ async getNextAvailable(
           schedule.endTime,
         );
 
-      const slotMinutes =
-        schedule.slotDuration +
-        schedule.bufferTime;
-
-      const totalSlots =
+      const slotCount =
         Math.floor(
           totalMinutes /
-            slotMinutes,
+            ((schedule.slotDuration || 15) +
+              (schedule.bufferTime || 0)),
         );
 
       if (
-        bookedCount <
-        totalSlots
+        bookedCount < slotCount
       ) {
         return {
           success: true,
           availableDate:
-            dateString,
-          schedulingType:
-            'STREAM',
+            checkDate
+              .toISOString()
+              .split('T')[0],
+          schedulingType: 'STREAM',
           availableSlots:
-            totalSlots -
+            slotCount -
             bookedCount,
           startTime:
             schedule.startTime,
@@ -542,33 +365,23 @@ async getNextAvailable(
   return {
     success: false,
     message:
-      'No appointments available in the next 30 working days',
+      'No appointments available in next 30 days',
   };
-}
-private getDayName(
-  date: Date,
-): string {
-  return date.toLocaleDateString(
-    'en-US',
-    {
-      weekday: 'long',
-    },
-  );
 }
 private calculateMinutes(
   start: string,
   end: string,
 ): number {
-  const [sh, sm] =
+  const [startHour, startMinute] =
     start.split(':').map(Number);
 
-  const [eh, em] =
+  const [endHour, endMinute] =
     end.split(':').map(Number);
 
   return (
-    eh * 60 +
-    em -
-    (sh * 60 + sm)
+    endHour * 60 +
+    endMinute -
+    (startHour * 60 + startMinute)
   );
 }
 }

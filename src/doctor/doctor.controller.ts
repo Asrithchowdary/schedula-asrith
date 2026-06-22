@@ -93,24 +93,4 @@ getDoctorAvailability(
     doctorId,
   );
 }
-@Get('appointments')
-getDoctorAppointments(
-  @Query('doctorId') doctorId: number,
-  @Query('date') date?: string,
-) {
-  return this.doctorService.getDoctorAppointments(
-    Number(doctorId),
-    date,
-  );
-}
-@Patch('appointments/:id/cancel')
-cancelAppointment(
-  @Param('id') id: number,
-  @Query('doctorId') doctorId: number,
-) {
-  return this.doctorService.cancelDoctorAppointment(
-    Number(id),
-    Number(doctorId),
-  );
-}
 }

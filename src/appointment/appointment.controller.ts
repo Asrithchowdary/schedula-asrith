@@ -1,4 +1,11 @@
-import {Controller,Post,Body,Get,Param,Patch,Query} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 
 @Controller('appointment')
@@ -29,21 +36,21 @@ export class AppointmentController {
   @Get('doctor/:doctorId')
   getDoctorAppointments(
     @Param('doctorId') doctorId: number,
-    @Query('date')date?:string,
   ) {
     return this.appointmentService.getDoctorAppointments(
       Number(doctorId),
-      date,
     );
   }
- @Get('next-available/:doctorId')
-getNextAvailable(
-  @Param('doctorId') doctorId: number,
-) {
-  return this.appointmentService.getNextAvailable(
-    Number(doctorId),
-  );
-}
+
+  @Get('next-available/:doctorId')
+  getNextAvailable(
+    @Param('doctorId') doctorId: number,
+  ) {
+    return this.appointmentService.getNextAvailable(
+      Number(doctorId),
+    );
+  }
+
   @Patch(':id/cancel')
   cancelAppointment(
     @Param('id') id: number,
@@ -52,16 +59,4 @@ getNextAvailable(
       Number(id),
     );
   }
-
-  @Patch(':id/reschedule')
-rescheduleAppointment(
-  @Param('id') id: number,
-  @Body() body: any,
-) {
-  return this.appointmentService.rescheduleAppointment(
-    Number(id),
-    body,
-  );
- }
-
 }
