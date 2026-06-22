@@ -45,7 +45,6 @@ export class DoctorProfile {
 })
 schedulingType: string;
 
-
 @Column({
   nullable: true,
 })

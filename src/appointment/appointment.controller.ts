@@ -1,4 +1,11 @@
-import {Controller,Post,Body,Get,Param,Patch,} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 
 @Controller('appointment')
@@ -31,6 +38,15 @@ export class AppointmentController {
     @Param('doctorId') doctorId: number,
   ) {
     return this.appointmentService.getDoctorAppointments(
+      Number(doctorId),
+    );
+  }
+
+  @Get('next-available/:doctorId')
+  getNextAvailable(
+    @Param('doctorId') doctorId: number,
+  ) {
+    return this.appointmentService.getNextAvailable(
       Number(doctorId),
     );
   }
