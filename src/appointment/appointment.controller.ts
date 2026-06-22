@@ -36,7 +36,14 @@ export class AppointmentController {
       date,
     );
   }
-
+ @Get('next-available/:doctorId')
+getNextAvailable(
+  @Param('doctorId') doctorId: number,
+) {
+  return this.appointmentService.getNextAvailable(
+    Number(doctorId),
+  );
+}
   @Patch(':id/cancel')
   cancelAppointment(
     @Param('id') id: number,
@@ -56,4 +63,5 @@ rescheduleAppointment(
     body,
   );
  }
+
 }

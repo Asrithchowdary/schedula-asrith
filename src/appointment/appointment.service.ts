@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { Appointment } from './appointment.entity';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
 import { AppointmentStatus } from './appointment-status.enum';
+import { RecurringAvailability } from '../availability/recurring-availability.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -22,6 +22,9 @@ export class AppointmentService {
 
     @InjectRepository(PatientProfile)
     private patientRepository: Repository<PatientProfile>,
+
+    @InjectRepository(RecurringAvailability)
+    private recurringRepository: Repository<RecurringAvailability>,
   ) {}
 
   async createAppointment(
@@ -85,14 +88,21 @@ export class AppointmentService {
         });
 
       if (
-        bookingCount >=
-        doctor.waveCapacity
-      ) {
-        throw new BadRequestException(
-          'Wave capacity reached',
-        );
-      }
+  bookingCount >=
+  doctor.waveCapacity
+) {
+  const nextAvailable =
+    await this.getNextAvailable(
+      doctor.id,
+    );
 
+  return {
+    success: false,
+    message:
+      'Selected day fully booked',
+    nextAvailable,
+  };
+}
       tokenNumber = bookingCount + 1;
     }
 
@@ -110,16 +120,23 @@ export class AppointmentService {
         },
       });
 
-    if (
-      doctor.schedulingType ===
-        'STREAM' &&
-      existingAppointment
-    ) {
-      throw new BadRequestException(
-        'Slot already booked',
-      );
-    }
+   if (
+  doctor.schedulingType ===
+    'STREAM' &&
+  existingAppointment
+) {
+  const nextAvailable =
+    await this.getNextAvailable(
+      doctor.id,
+    );
 
+  return {
+    success: false,
+    message:
+      'Selected slot unavailable',
+    nextAvailable,
+  };
+}
     const appointment =
       this.appointmentRepository.create({
         doctor,
@@ -377,5 +394,181 @@ export class AppointmentService {
     tokenNumber:
       appointment.tokenNumber,
   };
+}
+async getNextAvailable(
+  doctorId: number,
+) {
+  const doctor =
+    await this.doctorRepository.findOne({
+      where: {
+        id: doctorId,
+      },
+    });
+
+  if (!doctor) {
+    throw new NotFoundException(
+      'Doctor not found',
+    );
+  }
+
+  const schedules =
+    await this.recurringRepository.find({
+      where: {
+        doctor: {
+          id: doctorId,
+        },
+      },
+    });
+
+  if (schedules.length === 0) {
+    throw new BadRequestException(
+      'Doctor unavailable',
+    );
+  }
+
+  for (
+    let i = 0;
+    i < 30;
+    i++
+  ) {
+    const currentDate =
+      new Date();
+
+    currentDate.setDate(
+      currentDate.getDate() + i,
+    );
+
+    const dayName =
+      this.getDayName(
+        currentDate,
+      );
+
+    const schedule =
+      schedules.find(
+        (s) =>
+          s.dayOfWeek.toLowerCase() ===
+          dayName.toLowerCase(),
+      );
+
+    if (!schedule) {
+      continue;
+    }
+
+    const dateString =
+      currentDate
+        .toISOString()
+        .split('T')[0];
+
+    const bookedCount =
+      await this.appointmentRepository.count({
+        where: {
+          doctor: {
+            id: doctorId,
+          },
+          appointmentDate:
+            dateString,
+          status:
+            AppointmentStatus.BOOKED,
+        },
+      });
+
+    if (
+      schedule.schedulingType ===
+      'WAVE'
+    ) {
+      if (
+        bookedCount <
+        schedule.maxCapacity
+      ) {
+        return {
+          success: true,
+          availableDate:
+            dateString,
+          schedulingType:
+            'WAVE',
+          availableTokens:
+            schedule.maxCapacity -
+            bookedCount,
+          startTime:
+            schedule.startTime,
+          endTime:
+            schedule.endTime,
+        };
+      }
+    }
+
+    if (
+      schedule.schedulingType ===
+      'STREAM'
+    ) {
+      const totalMinutes =
+        this.calculateMinutes(
+          schedule.startTime,
+          schedule.endTime,
+        );
+
+      const slotMinutes =
+        schedule.slotDuration +
+        schedule.bufferTime;
+
+      const totalSlots =
+        Math.floor(
+          totalMinutes /
+            slotMinutes,
+        );
+
+      if (
+        bookedCount <
+        totalSlots
+      ) {
+        return {
+          success: true,
+          availableDate:
+            dateString,
+          schedulingType:
+            'STREAM',
+          availableSlots:
+            totalSlots -
+            bookedCount,
+          startTime:
+            schedule.startTime,
+          endTime:
+            schedule.endTime,
+        };
+      }
+    }
+  }
+
+  return {
+    success: false,
+    message:
+      'No appointments available in the next 30 working days',
+  };
+}
+private getDayName(
+  date: Date,
+): string {
+  return date.toLocaleDateString(
+    'en-US',
+    {
+      weekday: 'long',
+    },
+  );
+}
+private calculateMinutes(
+  start: string,
+  end: string,
+): number {
+  const [sh, sm] =
+    start.split(':').map(Number);
+
+  const [eh, em] =
+    end.split(':').map(Number);
+
+  return (
+    eh * 60 +
+    em -
+    (sh * 60 + sm)
+  );
 }
 }
