@@ -37,137 +37,122 @@ export class NotificationService {
     );
   }
 
-async getNotifications(
-  patientId: number,
-) {
-  if (!patientId) {
-    throw new NotFoundException(
-      'Patient not found',
-    );
-  }
-
-  const notifications =
-    await this.notificationRepository.find({
-      where: {
-        patientId,
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-
-  if (!notifications.length) {
-    return {
-      success: false,
-      message:
-        'No notifications available',
-    };
-  }
-
-  return {
-    success: true,
-    notifications,
-  };
-}
-async markAsRead(
-  notificationId: number,
-) {
-  const notification =
-    await this.notificationRepository.findOne({
-      where: {
-        id: notificationId,
-      },
-    });
-
-  if (!notification) {
-    throw new NotFoundException(
-      'Notification not found',
-    );
-  }
-
-  if (notification.isRead) {
-    throw new BadRequestException(
-      'Notification already marked as read',
-    );
-  }
-
-  notification.isRead = true;
-
-  await this.notificationRepository.save(
-    notification,
-  );
-
-  return {
-    success: true,
-    message:
-      'Notification marked as read',
-    notification,
-  };
-}
-async markAllAsRead(
-  patientId: number,
-) {
-  if (!patientId) {
-    throw new NotFoundException(
-      'Patient not found',
-    );
-  }
-
-  const notifications =
-    await this.notificationRepository.find({
-      where: {
-        patientId,
-        isRead: false,
-      },
-    });
-
-  if (
-    notifications.length === 0
+  async getNotifications(
+    patientId: number,
   ) {
+    const notifications =
+      await this.notificationRepository.find({
+        where: {
+          patientId,
+        },
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+
+    if (!notifications.length) {
+      return {
+        success: false,
+        message:
+          'No notifications available',
+      };
+    }
+
     return {
-      success: false,
-      message:
-        'No unread notifications found',
+      success: true,
+      notifications,
     };
   }
 
-  for (const notification of notifications) {
+  async markAsRead(
+    notificationId: number,
+  ) {
+    const notification =
+      await this.notificationRepository.findOne({
+        where: {
+          id: notificationId,
+        },
+      });
+
+    if (!notification) {
+      throw new NotFoundException(
+        'Notification not found',
+      );
+    }
+
+    if (notification.isRead) {
+      throw new BadRequestException(
+        'Notification already marked as read',
+      );
+    }
+
     notification.isRead = true;
-  }
 
-  await this.notificationRepository.save(
-    notifications,
-  );
-
-  return {
-    success: true,
-    message:
-      'All notifications marked as read',
-    updatedCount:
-      notifications.length,
-  };
-}
-async getUnreadCount(
-  patientId: number,
-) {
-  if (!patientId) {
-    throw new NotFoundException(
-      'Patient not found',
+    await this.notificationRepository.save(
+      notification,
     );
+
+    return {
+      success: true,
+      message:
+        'Notification marked as read',
+      notification,
+    };
   }
 
-  const count =
-    await this.notificationRepository.count({
-      where: {
-        patientId,
-        isRead: false,
-      },
-    });
+  async markAllAsRead(
+    patientId: number,
+  ) {
+    const notifications =
+      await this.notificationRepository.find({
+        where: {
+          patientId,
+          isRead: false,
+        },
+      });
 
-  return {
-    success: true,
-    patientId,
-    unreadCount: count,
-  };
- }
+    if (
+      notifications.length === 0
+    ) {
+      return {
+        success: false,
+        message:
+          'No unread notifications found',
+      };
+    }
+
+    for (const notification of notifications) {
+      notification.isRead = true;
+    }
+
+    await this.notificationRepository.save(
+      notifications,
+    );
+
+    return {
+      success: true,
+      message:
+        'All notifications marked as read',
+      updatedCount:
+        notifications.length,
+    };
+  }
+
+  async getUnreadCount(
+    patientId: number,
+  ) {
+    const count =
+      await this.notificationRepository.count({
+        where: {
+          patientId,
+          isRead: false,
+        },
+      });
+
+    return {
+      success: true,
+      patientId,
+      unreadCount: count,
+    };
+  }
 }
