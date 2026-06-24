@@ -7,6 +7,7 @@ import { AppointmentService } from './appointment.service';
 
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PatientProfile } from '../patient/patient-profile.entity';
       DoctorProfile,
       PatientProfile,
     ]),
+    NotificationModule,
   ],
   controllers: [AppointmentController],
   providers: [AppointmentService],
