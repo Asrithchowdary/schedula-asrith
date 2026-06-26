@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-} from 'typeorm';
+import {Entity,PrimaryGeneratedColumn,Column,ManyToOne,CreateDateColumn,} from 'typeorm';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
 import { AppointmentStatus } from './appointment-status.enum';
@@ -46,6 +40,11 @@ export class Appointment {
   })
   status: AppointmentStatus;
 
+  @Column({
+    default:false
+  })
+  reminderSent:boolean;
+  
   @CreateDateColumn()
   createdAt: Date;
 }

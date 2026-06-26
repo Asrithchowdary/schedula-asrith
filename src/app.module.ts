@@ -17,6 +17,9 @@ import { SlotModule } from './slot/slot.module';
 import { Slot } from './slot/slot.entity';
 import { AppointmentModule } from './appointment/appointment.module';
 import { Appointment } from './appointment/appointment.entity';
+import { NotificationModule } from './notification/notification.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ReminderModule } from './reminder/reminder.module';
 
 console.log(
   'DATABASE_URL = ',
@@ -26,9 +29,10 @@ console.log(
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
+      isGlobal:true,
+      envFilePath:'.env',
     }),
+    ScheduleModule.forRoot(),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -48,6 +52,7 @@ console.log(
         RecurringAvailability,
         CustomAvailability,
         Slot,
+        Appointment,
       ],
 
       synchronize: true,
@@ -60,6 +65,8 @@ console.log(
     AvailabilityModule,
     SlotModule,
     AppointmentModule,
+    NotificationModule,
+    ReminderModule,
   ],
 
   controllers: [AppController],
