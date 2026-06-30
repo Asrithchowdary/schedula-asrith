@@ -1,12 +1,6 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
-
+import {Injectable,NotFoundException,BadRequestException,} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { Notification } from './notification.entity';
 import { NotificationType } from './notification-type.enum';
 

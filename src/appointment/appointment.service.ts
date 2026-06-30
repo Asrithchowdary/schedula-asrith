@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import {Injectable,NotFoundException,BadRequestException,} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Appointment } from './appointment.entity';
@@ -62,18 +58,29 @@ export class AppointmentService {
       );
     }
 
-    const appointmentDate =
-      new Date(body.date);
+  const appointmentDate = new Date(body.date);
 
-    const today = new Date();
+// Check invalid date format
+if (isNaN(appointmentDate.getTime())) {
+  throw new BadRequestException(
+    'Invalid date format',
+  );
+}
 
-    today.setHours(0, 0, 0, 0);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+appointmentDate.setHours(0, 0, 0, 0);
 
-    if (appointmentDate < today) {
-      throw new BadRequestException(
-        'Past date not allowed',
-      );
-    }
+if (appointmentDate.getTime() < today.getTime()) {
+  throw new BadRequestException(
+    'Booking for past dates is not allowed',
+  );
+}
+if (appointmentDate.getTime() > today.getTime()) {
+  throw new BadRequestException(
+    'Booking is allowed only for today',
+  );
+}
 
     let tokenNumber = null;
 
