@@ -9,13 +9,18 @@ import { Appointment } from './appointment.entity';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
 import { AppointmentStatus } from './appointment-status.enum';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationType } from '../notification/notification-type.enum';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
+
 
 @Injectable()
 export class AppointmentService {
   constructor(
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
+
+    private readonly notificationService: NotificationService,
 
     @InjectRepository(DoctorProfile)
     private doctorRepository: Repository<DoctorProfile>,
@@ -238,6 +243,68 @@ export class AppointmentService {
       appointment,
     );
   }
+
+  async rescheduleAppointment(
+  appointmentId: number,
+  newDate: string,
+  startTime: string,
+  endTime: string,
+) {
+  const appointment =
+    await this.appointmentRepository.findOne({
+      where: {
+        id: appointmentId,
+      },
+      relations: {
+        patient: true,
+        doctor: true,
+      },
+    });
+
+  if (!appointment) {
+    throw new NotFoundException(
+      'Appointment not found',
+    );
+  }
+
+  if (
+    appointment.status === 'CANCELLED'
+  ) {
+    throw new BadRequestException(
+      'Cancelled appointment cannot be rescheduled',
+    );
+  }
+
+  appointment.appointmentDate =
+    newDate;
+
+  appointment.startTime =
+    startTime;
+
+  appointment.endTime =
+    endTime;
+
+  const updatedAppointment =
+    await this.appointmentRepository.save(
+      appointment,
+    );
+
+  await this.notificationService.createNotification(
+    appointment.patient.id,
+    'Appointment Rescheduled',
+    `Your appointment has been rescheduled to ${newDate} from ${startTime} to ${endTime}`,
+    NotificationType.APPOINTMENT_RESCHEDULED,
+  );
+
+  return {
+    success: true,
+    message:
+      'Appointment rescheduled successfully',
+    appointment:
+      updatedAppointment,
+  };
+}
+
 async getNextAvailable(
   doctorId: number,
 ) {
@@ -384,4 +451,5 @@ private calculateMinutes(
     (startHour * 60 + startMinute)
   );
 }
+
 }
