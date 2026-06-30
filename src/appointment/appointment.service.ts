@@ -9,6 +9,7 @@ import { NotificationService } from '../notification/notification.service';
 import { NotificationType } from '../notification/notification-type.enum';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
 
+
 @Injectable()
 export class AppointmentService {
   constructor(
@@ -59,6 +60,7 @@ export class AppointmentService {
 
   const appointmentDate = new Date(body.date);
 
+// Check invalid date format
 if (isNaN(appointmentDate.getTime())) {
   throw new BadRequestException(
     'Invalid date format',
@@ -79,48 +81,6 @@ if (appointmentDate.getTime() > today.getTime()) {
     'Booking is allowed only for today',
   );
 }
-
-const appointmentDay = new Date(body.date)
-  .toLocaleDateString('en-US', {
-    weekday: 'long',
-  })
-  .toUpperCase();
-
-  console.log('Request Body:', body);
-
-console.log('Appointment Day:', appointmentDay);
-
-const availability =
-  await this.recurringRepository.findOne({
-    where: {
-      doctor: { id: doctor.id },
-      dayOfWeek: appointmentDay,
-    },
-    order: {
-      startTime: 'ASC',
-    },
-  });
-
-  console.log('Availability:', availability);
- 
-if (!availability) {
-  throw new BadRequestException(
-    'Doctor is unavailable today',
-  );
-}
-
-const toMinutes = (
-  time: string,
-): number => {
-  const [hour, minute] = time
-    .split(':')
-    .map(Number);
-
-  return hour * 60 + minute;
-};
-
-const consultationStart =
-  toMinutes(availability.startTime);
 
 const consultationEnd =
   toMinutes(availability.endTime);

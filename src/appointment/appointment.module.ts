@@ -10,6 +10,7 @@ import { PatientProfile } from '../patient/patient-profile.entity';
 import { NotificationModule } from '../notification/notification.module';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
 
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
