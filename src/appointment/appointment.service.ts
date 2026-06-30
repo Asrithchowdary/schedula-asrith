@@ -7,6 +7,9 @@ import { PatientProfile } from '../patient/patient-profile.entity';
 import { AppointmentStatus } from './appointment-status.enum';
 import { NotificationService } from '../notification/notification.service';
 import { NotificationType } from '../notification/notification-type.enum';
+import { RecurringAvailability } from '../availability/recurring-availability.entity';
+
+
 @Injectable()
 export class AppointmentService {
   constructor(
@@ -20,6 +23,9 @@ export class AppointmentService {
 
     @InjectRepository(PatientProfile)
     private patientRepository: Repository<PatientProfile>,
+
+    @InjectRepository(RecurringAvailability)
+    private recurringRepository: Repository<RecurringAvailability>,
   ) {}
 
   async createAppointment(
@@ -54,7 +60,6 @@ export class AppointmentService {
 
   const appointmentDate = new Date(body.date);
 
-// Check invalid date format
 if (isNaN(appointmentDate.getTime())) {
   throw new BadRequestException(
     'Invalid date format',
@@ -76,7 +81,79 @@ if (appointmentDate.getTime() > today.getTime()) {
   );
 }
 
-    let tokenNumber = null;
+const appointmentDay = new Date(body.date)
+  .toLocaleDateString('en-US', {
+    weekday: 'long',
+  })
+  .toUpperCase();
+
+  console.log('Request Body:', body);
+
+console.log('Appointment Day:', appointmentDay);
+
+const availability =
+  await this.recurringRepository.findOne({
+    where: {
+      doctor: { id: doctor.id },
+      dayOfWeek: appointmentDay,
+    },
+    order: {
+      startTime: 'ASC',
+    },
+  });
+
+  console.log('Availability:', availability);
+ 
+if (!availability) {
+  throw new BadRequestException(
+    'Doctor is unavailable today',
+  );
+}
+
+const toMinutes = (
+  time: string,
+): number => {
+  const [hour, minute] = time
+    .split(':')
+    .map(Number);
+
+  return hour * 60 + minute;
+};
+
+const consultationStart =
+  toMinutes(availability.startTime);
+
+const consultationEnd =
+  toMinutes(availability.endTime);
+
+
+const bookingOpen =
+  consultationStart - 120;
+
+
+const bookingClose =
+  consultationEnd - 60;
+
+
+const now = new Date();
+
+const currentMinutes =
+  now.getHours() * 60 +
+  now.getMinutes();
+
+if (currentMinutes < bookingOpen) {
+  throw new BadRequestException(
+    'Booking window has not opened yet',
+  );
+}
+
+if (currentMinutes > bookingClose) {
+  throw new BadRequestException(
+    'Booking window has closed',
+  );
+}
+
+let tokenNumber = null;
 
     if (
       doctor.schedulingType === 'WAVE'
