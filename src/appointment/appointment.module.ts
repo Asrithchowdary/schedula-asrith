@@ -7,6 +7,7 @@ import { AppointmentService } from './appointment.service';
 
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
+import { RecurringAvailability } from '../availability/recurring-availability.entity';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PatientProfile } from '../patient/patient-profile.entity';
       Appointment,
       DoctorProfile,
       PatientProfile,
+      RecurringAvailability,
     ]),
   ],
   controllers: [AppointmentController],
