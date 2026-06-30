@@ -17,6 +17,7 @@ import { SlotModule } from './slot/slot.module';
 import { Slot } from './slot/slot.entity';
 import { AppointmentModule } from './appointment/appointment.module';
 import { Appointment } from './appointment/appointment.entity';
+import { NotificationModule } from './notification/notification.module';
 
 console.log(
   'DATABASE_URL = ',
@@ -48,6 +49,7 @@ console.log(
         RecurringAvailability,
         CustomAvailability,
         Slot,
+        Appointment,
       ],
 
       synchronize: true,
@@ -60,6 +62,7 @@ console.log(
     AvailabilityModule,
     SlotModule,
     AppointmentModule,
+    NotificationModule,
   ],
 
   controllers: [AppController],
