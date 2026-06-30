@@ -8,6 +8,8 @@ import { AppointmentService } from './appointment.service';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { PatientProfile } from '../patient/patient-profile.entity';
 import { NotificationModule } from '../notification/notification.module';
+import { RecurringAvailability } from '../availability/recurring-availability.entity';
+
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { NotificationModule } from '../notification/notification.module';
       Appointment,
       DoctorProfile,
       PatientProfile,
+      RecurringAvailability,
     ]),
     NotificationModule,
   ],
