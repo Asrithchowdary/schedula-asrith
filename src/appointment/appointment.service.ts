@@ -82,7 +82,37 @@ if (appointmentDate.getTime() > today.getTime()) {
   );
 }
 
-    let tokenNumber = null;
+const consultationEnd =
+  toMinutes(availability.endTime);
+
+
+const bookingOpen =
+  consultationStart - 120;
+
+
+const bookingClose =
+  consultationEnd - 60;
+
+
+const now = new Date();
+
+const currentMinutes =
+  now.getHours() * 60 +
+  now.getMinutes();
+
+if (currentMinutes < bookingOpen) {
+  throw new BadRequestException(
+    'Booking window has not opened yet',
+  );
+}
+
+if (currentMinutes > bookingClose) {
+  throw new BadRequestException(
+    'Booking window has closed',
+  );
+}
+
+let tokenNumber = null;
 
     if (
       doctor.schedulingType === 'WAVE'
