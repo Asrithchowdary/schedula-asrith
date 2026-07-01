@@ -58,7 +58,7 @@ export class AppointmentService {
       );
     }
 
-  const appointmentDate = new Date(body.date);
+const appointmentDate = new Date(body.date);
 
 // Check invalid date format
 if (isNaN(appointmentDate.getTime())) {
@@ -76,23 +76,61 @@ if (appointmentDate.getTime() < today.getTime()) {
     'Booking for past dates is not allowed',
   );
 }
+
 if (appointmentDate.getTime() > today.getTime()) {
   throw new BadRequestException(
     'Booking is allowed only for today',
   );
 }
 
+// Get appointment day
+const appointmentDay = new Date(body.date)
+  .toLocaleDateString('en-US', {
+    weekday: 'long',
+  })
+  .toUpperCase();
+
+// Get doctor's availability
+const availability =
+  await this.recurringRepository.findOne({
+    where: {
+      doctor: {
+        id: doctor.id,
+      },
+      dayOfWeek: appointmentDay,
+    },
+    order: {
+      startTime: 'ASC',
+    },
+  });
+
+if (!availability) {
+  throw new BadRequestException(
+    'Doctor is unavailable today',
+  );
+}
+
+// Helper method
+const toMinutes = (
+  time: string,
+): number => {
+  const [hour, minute] =
+    time.split(':').map(Number);
+
+  return hour * 60 + minute;
+};
+
+const consultationStart =
+  toMinutes(availability.startTime);
+
 const consultationEnd =
   toMinutes(availability.endTime);
-
 
 const bookingOpen =
   consultationStart - 120;
 
-
 const bookingClose =
   consultationEnd - 60;
-
 
 const now = new Date();
 
@@ -113,40 +151,6 @@ if (currentMinutes > bookingClose) {
 }
 
 let tokenNumber = null;
-
-    if (
-      doctor.schedulingType === 'WAVE'
-    ) {
-      const bookingCount =
-        await this.appointmentRepository.count({
-          where: {
-            doctor: {
-              id: doctor.id,
-            },
-            appointmentDate: body.date,
-            status:
-              AppointmentStatus.BOOKED,
-          },
-        });
-
-      if (
-  bookingCount >=
-  doctor.waveCapacity
-) {
-  const nextAvailable =
-    await this.getNextAvailable(
-      doctor.id,
-    );
-
-  return {
-    success: false,
-    message:
-      'Selected day fully booked',
-    nextAvailable,
-  };
-}
-      tokenNumber = bookingCount + 1;
-    }
 
     const existingAppointment =
       await this.appointmentRepository.findOne({
