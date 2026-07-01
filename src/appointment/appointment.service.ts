@@ -60,15 +60,15 @@ export class AppointmentService {
 
 const appointmentDate = new Date(body.date);
 
-// Check invalid date format
 if (isNaN(appointmentDate.getTime())) {
   throw new BadRequestException(
     'Invalid date format',
   );
 }
-
 const today = new Date();
+
 today.setHours(0, 0, 0, 0);
+
 appointmentDate.setHours(0, 0, 0, 0);
 
 if (appointmentDate.getTime() < today.getTime()) {
@@ -77,22 +77,18 @@ if (appointmentDate.getTime() < today.getTime()) {
   );
 }
 
-if (appointmentDate.getTime() > today.getTime()) {
-  throw new BadRequestException(
-    'Booking is allowed only for today',
-  );
-}
+console.log('Date:', body.date);
 
-// Get appointment day
 const appointmentDay = new Date(body.date)
   .toLocaleDateString('en-US', {
     weekday: 'long',
   })
   .toUpperCase();
 
-// Get doctor's availability
-const availability =
-  await this.recurringRepository.findOne({
+  console.log('Day:', appointmentDay);
+
+  const availabilities =
+  await this.recurringRepository.find({
     where: {
       doctor: {
         id: doctor.id,
@@ -104,13 +100,81 @@ const availability =
     },
   });
 
-if (!availability) {
+  console.log(availabilities.length);
+console.log(availabilities);
+
+if (availabilities.length === 0) {
   throw new BadRequestException(
-    'Doctor is unavailable today',
+    'Doctor is unavailable on this day',
   );
 }
 
-// Helper method
+const availability =
+  availabilities.find(
+    slot =>
+      slot.allowFutureBooking === true,
+  ) ?? availabilities[0];
+
+  console.log('========================');
+console.log('CREATE APPOINTMENT API');
+console.log(body);
+
+  console.log('Appointment Day:', appointmentDay);
+  console.log('Availabilities:', availabilities);
+  console.log('Selected Availability:', availability);
+
+if (
+  availability.maxFutureBookingDays != null &&
+  availability.maxFutureBookingDays < 0
+) {
+  throw new BadRequestException(
+    'Invalid future booking configuration',
+  );
+}
+console.log(
+    'Selected',
+    availability.id,
+    availability.allowFutureBooking,
+    availability.maxFutureBookingDays,
+);
+
+if (!availability.allowFutureBooking) {
+  if (
+    appointmentDate.getTime() !==
+    today.getTime()
+  ) {
+    throw new BadRequestException(
+      'Only today booking is allowed',
+    );
+  }
+} else {
+  const maxDays =
+    availability.maxFutureBookingDays ?? 7;
+
+  const lastBookingDate =
+    new Date(today);
+
+  lastBookingDate.setDate(
+    today.getDate() + maxDays,
+  );
+
+  lastBookingDate.setHours(
+    0,
+    0,
+    0,
+    0,
+  );
+
+  if (
+    appointmentDate.getTime() >
+    lastBookingDate.getTime()
+  ) {
+    throw new BadRequestException(
+      `Booking allowed only within ${maxDays} days`,
+    );
+  }
+}
+
 const toMinutes = (
   time: string,
 ): number => {
@@ -138,16 +202,23 @@ const currentMinutes =
   now.getHours() * 60 +
   now.getMinutes();
 
-if (currentMinutes < bookingOpen) {
-  throw new BadRequestException(
-    'Booking window has not opened yet',
-  );
-}
+if (
+  appointmentDate.getTime() ===
+  today.getTime()
+) {
 
-if (currentMinutes > bookingClose) {
-  throw new BadRequestException(
-    'Booking window has closed',
-  );
+  if(currentMinutes < bookingOpen){
+      throw new BadRequestException(
+          'Booking window has not opened yet'
+      );
+  }
+
+  if(currentMinutes > bookingClose){
+      throw new BadRequestException(
+          'Booking window has closed'
+      );
+  }
+
 }
 
 let tokenNumber = null;
