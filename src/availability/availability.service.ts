@@ -9,6 +9,10 @@ import { RecurringAvailability } from './recurring-availability.entity';
 import { CustomAvailability } from './custom-availability.entity';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
 import { UpdateFutureBookingDto } from './dto/update-future-booking.dto';
+import { Appointment } from '../appointment/appointment.entity';
+import { AppointmentStatus } from '../appointment/appointment-status.enum';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationType } from '../notification/notification-type.enum';
 
 @Injectable()
 export class AvailabilityService {
@@ -21,6 +25,11 @@ export class AvailabilityService {
 
     @InjectRepository(DoctorProfile)
     private doctorRepo: Repository<DoctorProfile>,
+
+    @InjectRepository(Appointment)
+    private appointmentRepo: Repository<Appointment>,
+
+    private readonly notificationService: NotificationService,
   ) {}
 
   private validateTimeRange(
@@ -259,17 +268,64 @@ export class AvailabilityService {
       }
     }
 
-    const availability =
-      this.customRepo.create({
-        ...data,
-        doctor,
-      });
+  const availability =
+  this.customRepo.create({
+    ...data,
+    doctor,
+  });
 
-    return this.customRepo.save(
-      availability,
-    );
+const appointments =
+  await this.appointmentRepo.find({
+    where: {
+      doctor: {
+        id: doctor.id,
+      },
+      appointmentDate: data.date,
+      status: AppointmentStatus.BOOKED,
+    },
+    relations: {
+      patient: true,
+    },
+  });
+
+const affectedAppointments =
+  appointments.filter(
+    appointment =>
+      appointment.startTime <
+        data.startTime ||
+      appointment.endTime >
+        data.endTime,
+  );
+
+await this.customRepo.save(
+  availability,
+);
+
+for (const appointment of affectedAppointments) {
+
+  appointment.status =
+    AppointmentStatus.CANCELLED;
+
+  await this.appointmentRepo.save(
+    appointment,
+  );
+
+  await this.notificationService.createNotification(
+    appointment.patient.id,
+    'Appointment Cancelled',
+    'Your appointment has been cancelled because the doctor updated their availability. Please book another appointment.',
+    NotificationType.APPOINTMENT_CANCELLED,
+  );
+}
+
+return {
+  success: true,
+  message:
+    'Availability override created successfully.',
+  cancelledAppointments:
+    affectedAppointments.length,
+};
   }
-
   async getAvailabilityByDate(
     date: string,
     userId: number,
