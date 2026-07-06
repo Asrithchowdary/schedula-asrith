@@ -50,6 +50,16 @@ export class RecurringAvailability {
   bufferTime: number;
 
   @Column({
+    default:false,
+  })
+  allowFutureBooking: boolean;
+
+  @Column({
+    nullable: true,
+  })
+  maxFutureBookingDays: number;
+
+  @Column({
     nullable: true,
     default: 5,
   })

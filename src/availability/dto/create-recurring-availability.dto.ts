@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -38,4 +39,12 @@ export class CreateRecurringAvailabilityDto {
   @IsInt()
   @Min(1)
   maxCapacity?: number;
+
+  @IsBoolean()
+  allowFutureBooking: boolean;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  maxFutureBookingDays?: number;
 }

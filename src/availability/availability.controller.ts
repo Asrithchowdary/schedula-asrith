@@ -14,6 +14,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AvailabilityService } from './availability.service';
 import { RolesGuard } from '../auth/roles.guard';
+import { UpdateFutureBookingDto } from './dto/update-future-booking.dto';
 
 @Controller('doctor/availability')
 
@@ -42,6 +43,22 @@ export class AvailabilityController {
       req.user.userId,
     );
   }
+  
+  @Patch('future-booking/:doctorId')
+updateFutureBooking(
+  @Param('doctorId', ParseIntPipe)
+  doctorId: number,
+
+  @Body()
+  dto: UpdateFutureBookingDto,
+) {
+
+  return this.availabilityService.updateFutureBooking(
+    doctorId,
+    dto,
+  );
+
+}
 
   @Patch(':id')
   updateRecurring(

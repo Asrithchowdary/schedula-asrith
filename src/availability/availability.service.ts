@@ -3,14 +3,12 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
-
 import { RecurringAvailability } from './recurring-availability.entity';
 import { CustomAvailability } from './custom-availability.entity';
 import { DoctorProfile } from '../doctor/doctor-profile.entity';
+import { UpdateFutureBookingDto } from './dto/update-future-booking.dto';
 
 @Injectable()
 export class AvailabilityService {
@@ -327,4 +325,35 @@ export class AvailabilityService {
       },
     });
   }
+
+  async updateFutureBooking(
+  doctorId: number,
+  dto: UpdateFutureBookingDto,
+) {
+
+  await this.recurringRepo.update(
+    {
+      doctor: {
+        id: doctorId,
+      },
+    },
+    {
+      allowFutureBooking:
+        dto.allowFutureBooking,
+      maxFutureBookingDays:
+        dto.maxFutureBookingDays,
+    },
+  );
+  return this.recurringRepo.find({
+    where: {
+      doctor: {
+        id: doctorId,
+      },
+    },
+    order: {
+      dayOfWeek: 'ASC',
+      startTime: 'ASC',
+    },
+  });
+}
 }
