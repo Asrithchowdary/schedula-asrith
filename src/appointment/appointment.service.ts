@@ -8,7 +8,7 @@ import { AppointmentStatus } from './appointment-status.enum';
 import { NotificationService } from '../notification/notification.service';
 import { NotificationType } from '../notification/notification-type.enum';
 import { RecurringAvailability } from '../availability/recurring-availability.entity';
-
+import { DoctorLeave } from '../leave/doctor-leave.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -26,6 +26,9 @@ export class AppointmentService {
 
     @InjectRepository(RecurringAvailability)
     private recurringRepository: Repository<RecurringAvailability>,
+
+    @InjectRepository(DoctorLeave)
+    private leaveRepository: Repository<DoctorLeave>,
   ) {}
 
   async createAppointment(
@@ -44,6 +47,24 @@ export class AppointmentService {
         'Doctor not found',
       );
     }
+    const doctorLeave =
+  await this.leaveRepository.findOne({
+    where: {
+      doctor: {
+        id: doctor.id,
+      },
+      leaveDate: body.date,
+    },
+  });
+        console.log("Doctor ID:", doctor.id);
+        console.log("Booking Date:", body.date);
+        console.log("Doctor Leave:", doctorLeave);
+  if (doctorLeave) {
+    throw new BadRequestException(
+      'Doctor is unavailable on this date. Please select another available date.',
+    );
+  }
+  
 
     const patient =
       await this.patientRepository.findOne({

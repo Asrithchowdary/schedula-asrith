@@ -20,6 +20,8 @@ import { Appointment } from './appointment/appointment.entity';
 import { NotificationModule } from './notification/notification.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ReminderModule } from './reminder/reminder.module';
+import { LeaveModule } from './leave/leave.module';
+import { DoctorLeave } from './leave/doctor-leave.entity';
 
 console.log(
   'DATABASE_URL = ',
@@ -53,6 +55,7 @@ console.log(
         CustomAvailability,
         Slot,
         Appointment,
+        DoctorLeave,
       ],
 
       synchronize: true,
@@ -67,6 +70,7 @@ console.log(
     AppointmentModule,
     NotificationModule,
     ReminderModule,
+    LeaveModule,
   ],
 
   controllers: [AppController],
